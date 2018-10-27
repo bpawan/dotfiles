@@ -1,6 +1,6 @@
 # dotfiles
 
-dotfiles for my i3 setup
+dotfiles of my i3 setup
 
 scrot:
 
