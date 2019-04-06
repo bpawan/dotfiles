@@ -1,0 +1,262 @@
+[bar/i3wmthemer_bar]
+width = 100%
+height = 27
+radius = 0
+fixed-center = false
+#monitor=HDMI1
+monitor=eDP1
+
+bottom = true
+
+#background = #272827
+background = #214e34
+
+#foreground = #657b83
+foreground = #7FC6EB
+
+line-size = 3
+line-color =
+
+border-size = 0
+border-color =
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 1
+module-margin-right = 0
+
+
+font-0 = "Source Code Pro Semibold:size=10;1"
+font-1 = "Font Awesome 5 Free:style=Solid:size=10;1"
+font-2 = "Font Awesome 5 Brands:size=10;1"
+
+modules-left = i3
+modules-center = title 
+modules-right = spotify date eth cpu memory battery bluetooth wlan powermenu
+
+tray-position =
+;tray-padding =
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+
+[module/bluetooth]
+type = custom/script
+exec = echo "$(cut -d':' -f2 <<< $(bluetoothctl info 6C:5A:B5:F5:61:C4 | grep Alias))"
+click-left = blueman-manager
+format = <label>
+
+format-background = #121420
+format-foreground = #ffffff
+
+format-padding = 1
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+enable-scroll = false
+reverse-scroll = false
+strip-wsnumbers = true
+pin-workspaces = true
+
+
+label-mode-padding = 2
+label-mode-foreground = #657b83
+label-mode-background = #364156
+
+label-focused = %name%
+label-focused-background = #3d2645
+label-focused-foreground = #ffffff
+label-focused-padding = 4
+label-focused-margin-right = 1
+
+label-unfocused = %name%
+label-unfocused-background = #121420
+label-unfocused-foreground = #ffffff
+label-unfocused-padding = 4
+label-unfocused-margin-right = 1 
+
+label-visible = %name%
+label-visible-background = #121420
+label-visible-foreground = #ffffff
+label-visible-padding = 4
+label-visible-margin-right = 1
+
+label-urgent = %name%
+label-urgent-background = #BA2922
+label-urgent-padding = 4
+
+[module/title]
+type = internal/xwindow
+
+format = <label>
+format-background = #121420
+format-foreground = #ffffff
+format-padding = 1
+
+label = %title%
+label-maxlen = 50
+
+[module/cpu]
+type = internal/cpu
+interval = 0.5
+
+format = <label> 
+format-background = #121420
+format-foreground = #ffffff
+format-padding = 1
+
+label = "  %percentage:2%%"
+
+
+[module/memory]
+type = internal/memory
+interval = 3
+
+format = <label>
+format-background = #121420
+format-foreground = #ffffff
+format-padding = 1
+
+label =  %gb_used%
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+time-format = %H:%M
+
+format = <label> 
+label-charging = " %percentage%%"
+label-full =   
+label-discharging = "  %percentage%%"
+
+format-background = #121420
+format-foreground = #ffffff
+format-padding = 1 
+
+
+format-charging = <label-charging>
+format-discharging = <label-discharging>
+format-full = <label-full>
+
+label-discharging-foreground = #ffffff
+label-discharging-background = #121420
+label-discharging-padding = 1
+
+label-charging-foreground = #ffffff
+label-charging-background = #121420
+label-charging-padding = 1
+
+label-full-foreground = #ffffff
+label-full-background= #121420
+label-full-padding = 0
+
+
+[module/wlan]
+type = internal/network
+interface = wlp2s0 
+interval = 3.0
+
+format-connected = <label-connected>
+label-connected =   %essid%
+
+label-connected-foreground = #ffffff
+label-connected-background = #121420
+label-connected-padding = 1
+
+format-disconnected = <label-disconnected>
+label-disconnected = not connected
+label-disconnected-foreground = #ffffff
+label-disconnected-background = #121420
+
+
+[module/eth]
+type = internal/network
+interface = enp0s3
+interval = 3.0
+
+format-connected-padding = 1
+label-connected-foreground = #ffffff
+label-connected-background = #121420
+label-connected-prefix = " "
+label-connected-prefix-foreground = #ffffff
+label-connected = %local_ip%
+
+format-disconnected =
+
+[module/date]
+type = internal/date
+interval = 5
+
+date =
+date-alt = " %Y-%m-%d"
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-prefix = 
+format-foreground = #ffffff
+format-background = #121420
+format-padding = 1
+
+label = %date% %time%
+
+[module/powermenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+label-open = "    "   
+label-open-foreground = #fffff
+label-close =  Cancel
+label-close-foreground = #ef233c
+label-separator = |
+label-separator-foreground = #ef233c
+menu-0-0 = "Reboot"
+menu-0-0-exec = menu-open-1
+menu-0-1 = "Power Off"
+menu-0-1-exec = menu-open-2
+menu-0-2 = "Log Off   "
+menu-0-2-exec = menu-open-3
+
+menu-1-0 = "Cancel"
+menu-1-0-exec = menu-open-0
+menu-1-1 = " Reboot  "
+menu-1-1-exec = reboot
+
+menu-2-0 = "Power Off"
+menu-2-0-exec = poweroff
+menu-2-1 = " Cancel  "
+menu-2-1-exec = menu-open-0
+
+menu-3-0 = "Log Off "
+menu-3-0-exec = pkill -KILL -u $USER
+menu-3-1 = " Cancel  "
+menu-3-1-exec = menu-open-0
+
+
+[module/spotify]
+type = custom/script
+interval = 1
+format-prefix = "  "
+format = <label>
+exec = python ~/.config/polybar/scripts/spotify_status.py -f '{artist}: {song}'
+click-left = rofi -show wifi -modi wifi:~/.config/rofi/scripts/wifi.sh
+
+
+format-foreground = #ffffff
+format-background = #121420
+format-padding = 6
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
